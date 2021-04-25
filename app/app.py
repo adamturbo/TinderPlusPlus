@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from elasticsearch import Elasticsearch
-from bot import *
+"""from bot import *
 import schedule
 import time
 
@@ -17,14 +17,12 @@ document = {
 
 
 cpt = 1
-
+ """
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    test = schedule.every(5).seconds.do(scrapingProfil(cpt))
-    print("test = ",test)
     return render_template('index.html')
 
 @app.route('/marketplace')

@@ -3,26 +3,27 @@ version: "3"
 services:
   elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
-    container_name: elasticsearch
+    container_name: elasticsearch_tinder
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.type=single-node
     ports:
       - "9201:9201"
-  notebook:
-    image: notebook
-    build: .
-    ports:
-     - "8888:8888"
-    command: ["pipenv", "run", "jupyter", "notebook", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
-    volumes:
-      - .:/Bot
   web:
     build: .
+    container_name: webapp_tinder
     ports:
-     - "5000:5000"
-    command: ["python", "main.py"]
+      - "5000:5000"
+    command: ["python", "./app/app.py"]
     volumes:
-      - .:/app
+      - ./:/tmp
     depends_on:
       - elastic
+  notebook:
+    container_name: notebook_tinder
+    build: .
+    ports:
+      - "8889:8889"
+    command: ["pipenv", "run", "jupyter notebook", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+    volumes:
+      - ./:/tmp

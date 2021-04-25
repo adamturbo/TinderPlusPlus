@@ -55,3 +55,4 @@ urllib3==1.25.11
 w3lib==1.22.0
 WTForms==2.3.3
 zope.interface==5.2.0
+pipenv

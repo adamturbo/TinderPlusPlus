@@ -44,4 +44,4 @@ def marketplace():
     return render_template('marcketplace.html', name=name, age=age, photo=photo, instagram=instagram, tags = tags)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

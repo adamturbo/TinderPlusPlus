@@ -14,7 +14,7 @@ services:
     container_name: webapp_tinder
     ports:
       - "5000:5000"
-    command: ["python", "./app/app.py"]
+    command: ["flask", "run", "--host=0.0.0.0"]
     volumes:
       - ./:/tmp
     depends_on:
@@ -23,7 +23,7 @@ services:
     container_name: notebook_tinder
     build: .
     ports:
-      - "8889:8889"
-    command: ["pipenv", "run", "jupyter notebook", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+      - "8888:8888"
+    command: ["jupyter", "notebook", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
     volumes:
       - ./:/tmp

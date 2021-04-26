@@ -1,5 +1,11 @@
 FROM python:3.8
 
-COPY . /tmp
 WORKDIR /tmp
+
+COPY . /tmp
+
+ARG env_flask_variable=app/app 
+ENV FLASK_APP=$env_flask_variable 
+
 RUN pip install -r requirements.txt
+

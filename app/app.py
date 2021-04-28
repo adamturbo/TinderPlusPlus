@@ -37,7 +37,7 @@ def marketplace():
 
 @app.route('/apiTinderPlusPlus')
 def apiTinderPlusPlus():
-    result = es_client.search(index="tinderplusplus_prod", size=5)
+    result = es_client.search(index="tinderplusplus_prod", size=9)
     """
     result['hits']['hits']
     return result['hits']['hits']

@@ -12,6 +12,7 @@
 </head>
 <body>
     <div class="container">
+<<<<<<< HEAD
         <div class="card-columns">
             <div class="card">
                 <div class="profile-card-4 text-center"><img src="http://envato.jayasankarkr.in/code/profile/assets/img/profile-4.jpg" class="img img-responsive">
@@ -256,6 +257,10 @@
                     </div>
                 </div>
             </div>
+=======
+        <div class="card-columns" id="idDeck">
+        </div>
+>>>>>>> b8f3ffc3a8477faa8ca03d3d4180cedd2d50fac3
     </div>
 </body>
     <style>
@@ -272,6 +277,7 @@
             background-image: linear-gradient(to bottom right, rgb(255, 38, 125), rgb(255 106 90));
 
         } 
+<<<<<<< HEAD
         /*
         
         
@@ -284,6 +290,8 @@
         display: inline-block
 
         */
+=======
+>>>>>>> b8f3ffc3a8477faa8ca03d3d4180cedd2d50fac3
 
         .card-columns {
             display: inline-block
@@ -365,6 +373,7 @@
             transform: skewY(3deg);
         }
 
+<<<<<<< HEAD
         .profile-card-4:hover img {
             transform: rotate(5deg) scale(1.1, 1.1);
             filter: brightness(110%);
@@ -375,15 +384,140 @@
         //var content = document.createElement("p");    
         //var item = document.getElementsByClassName("container"); 
         //document.getElementById("p1").innerHTML = "New text!";
+=======
+        .profile-card-4:hover img:first-of-type {
+            transform: rotate(0deg) scale(1.1, 1.1);
+            filter: brightness(110%);
+        }
+
+        .insta-icon-img{
+            width: 75px;
+            transform: rotate(-90deg) scale(0, 0);
+        }
+
+        .profile-description a {
+            font-size: 12px;
+            padding: 12px;
+            margin: 5px;
+        }
+        
+    </style>
+    <script>
+        
+>>>>>>> b8f3ffc3a8477faa8ca03d3d4180cedd2d50fac3
         $(document).ready(function(){
             var cpt = 0;
             $.get("apiTinderPlusPlus", function(data, status){
                 var array = data["hits"]["hits"];
                 for (i = 0; i < array.length; i++) {
+<<<<<<< HEAD
                     //<div class="card">
                 } 
             });
         });
+=======
+                    var urlPicture = array[i]["_source"]["picture"];
+                    var profilName = array[i]["_source"]["name"];
+                    var profilInsta = array[i]["_source"]["instagram"];
+                    var tag = array[i]["_source"]["tag"];
+                    var profilAge = array[i]["_source"]["age"];
+                    var profilCompteurVue = 250;
+                    createCard(urlPicture, profilName, profilInsta, tag, profilAge, profilAge, profilCompteurVue);
+                }
+            });
+        });
+/* 
+        var html = [
+            '<div class="card">',
+            '<div class="profile-card-4 text-center"><img src="'+urlPicture+'" class="img img-responsive" style="width: 100%">',
+            '<div class="profile-content">',
+            '<div class="profile-name">'+profilName+'',
+            '<br>',
+            '<a href=https://www.instagram.com/"'+profilInsta+'" class="insta-icon" target="_blank">',
+            '<img src="./static/image/icon-insta.png" class="insta-icon-img">',
+            '</a>',
+            '</div>',
+            '<br>',
+            '<div class="profile-description">',
+            '<a href="#" class="badge badge-dark">'+tag+'</a>',
+            '<a href="#" class="badge badge-dark">'+tag+'</a>',
+            '<a href="#" class="badge badge-dark">'+tag+'</a>',
+            '<a href="#" class="badge badge-dark">'+tag+'</a>',
+            '<a href="#" class="badge badge-dark">'+tag+'</a>',
+            '</div>',
+            '<div class="row">',
+            '<div class="col-sm">',
+            '<div class="profile-overview">',
+            '<p>Age</p>',
+            '<h4>'+profilAge+'</h4>',
+            '</div>',
+            '</div>',
+            '<div class="col-sm">',
+            '<div class="profile-overview">',
+            '<p>Vu</p>',
+            '<h4>'+profilCompteurVue+'</h4>',
+            '</div>',
+            '</div>',
+            '</div>',
+            '</div>',
+            '</div>',
+            '</div>'
+        ];
+
+        $("body").append(html); */
+
+        function createCard(urlPicture, profilName, profilInsta, tag, profilAge, profilAge, profilCompteurVue) {
+            var deck = document.getElementById("idDeck");
+            var card = document.createElement("div");
+            card.setAttribute("class","card");
+            deck.appendChild(card);
+            //var ppTag = haddleTags(tag);
+            var html = [
+                    '<div class="profile-card-4 text-center"><img src="'+urlPicture+'" class="img img-responsive" style="width: 100%">',
+                        '<div class="profile-content">',
+                            '<div class="profile-name">'+profilName+'',
+                                '<br>',
+                                    '<a href="https://www.instagram.com/'+profilInsta+'" class="insta-icon" target="_blank">',
+                                        '<img src="./static/image/icon-insta.png" class="insta-icon-img">',
+                                    '</a>',
+                            '</div>',
+                            '<br>',
+                            '<div class="profile-description">',
+                            '<div class="row">',
+                                '<div class="col-sm">',
+                                    '<div class="profile-overview">',
+                                        '<p>Age</p>',
+                                        '<h4>'+profilAge+'</h4>',
+                                    '</div>',
+                                '</div>',
+                                '<div class="col-sm">',
+                                    '<div class="profile-overview">',
+                                        '<p>Vu</p>',
+                                        '<h4>'+profilCompteurVue+'</h4>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                        '</div>',
+                    '</div>'
+            ].join("\n");
+            var temp = document.createElement('div');
+            temp.innerHTML = html;
+
+            card.appendChild(temp);
+            
+
+        };
+
+        function haddleTags(data) {
+            if (data == null) return "";
+            var tags = "";
+            for (i = 0; i < data.length; i++) {
+                var tag = '<a href="#" class="badge badge-dark">'+data[i]+'</a>';
+                tags += tag;
+            }
+            return tags
+        };
+>>>>>>> b8f3ffc3a8477faa8ca03d3d4180cedd2d50fac3
 
     </script>
 </html>

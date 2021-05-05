@@ -1,21 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 from elasticsearch import Elasticsearch
 
-
 app = Flask(__name__)
 
-"""
-LOCAL = False
+LOCAL = True
 
-es_client = Elasticsearch(hosts=["localhost" if LOCAL else "elasticsearch"])
+es_client = Elasticsearch(hosts=["localhost" if LOCAL else "elasticsearch_tinder"])
 
-document = {
-    "name":"App Profil", 
-    "description":"Contains all of the porfil of the application, the objectif is to provide the best profile for our user.",
-    "algo_type":"Web application"
-}
-cpt = 1
- """
+es_client.indices.delete(index='tinderplusplus', ignore=[400, 404])
 
 data = {
     "name" : "Laury",
@@ -43,5 +35,17 @@ def marketplace():
     tags = data['tags']
     return render_template('marcketplace.html', name=name, age=age, photo=photo, instagram=instagram, tags = tags)
 
+@app.route('/apiTinderPlusPlus')
+def apiTinderPlusPlus():
+    result = es_client.search(index="tinderplusplus_prod", size=5)
+    """
+    result['hits']['hits']
+    return result['hits']['hits']
+    """
+    return result
+
+@app.route('/toto')
+def toto():
+    return "toto"
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='127.0.0.1', debug=True)

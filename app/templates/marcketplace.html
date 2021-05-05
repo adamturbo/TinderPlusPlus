@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Tinder ++</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -9,8 +9,25 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="build/gradientify.js"></script>
+  <link rel="shortcut icon" type="image/png" href="/static/image/tppIcon.ico"/>
 </head>
 <body>
+    <img src="./static/image/tppIcon.png" style="display: block; margin-left: auto; margin-right: auto; width: 10%;">
+    <div class="container" style="margin-top: 40px;">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="customAge" style="margin: 10px;">Age:</label>
+                <select class="form-control" id="age"></select>
+            </div>
+            <div class="form-group">
+                <label for="customTag" style="margin: 10px;">Select list:</label>
+                <select class="form-control" id="tag"></select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" id="letsGo">Find your mate!</button>
+            </div>
+        </form>
+    </div>
     <div class="container">
         <div class="card-columns" id="idDeck">
         </div>
@@ -130,9 +147,11 @@
     </style>
     <script>
         
+        var url = "api"
+
         $(document).ready(function(){
             var cpt = 0;
-            $.get("apiTinderPlusPlus", function(data, status){
+            $.get(url, function(data, status){
                 var array = data["hits"]["hits"];
                 for (i = 0; i < array.length; i++) {
                     var urlPicture = array[i]["_source"]["picture"];
@@ -144,53 +163,39 @@
                     createCard(urlPicture, profilName, profilInsta, tag, profilAge, profilAge, profilCompteurVue);
                 }
             });
-        });
-/* 
-        var html = [
-            '<div class="card">',
-            '<div class="profile-card-4 text-center"><img src="'+urlPicture+'" class="img img-responsive" style="width: 100%">',
-            '<div class="profile-content">',
-            '<div class="profile-name">'+profilName+'',
-            '<br>',
-            '<a href=https://www.instagram.com/"'+profilInsta+'" class="insta-icon" target="_blank">',
-            '<img src="./static/image/icon-insta.png" class="insta-icon-img">',
-            '</a>',
-            '</div>',
-            '<br>',
-            '<div class="profile-description">',
-            '<a href="#" class="badge badge-dark">'+tag+'</a>',
-            '<a href="#" class="badge badge-dark">'+tag+'</a>',
-            '<a href="#" class="badge badge-dark">'+tag+'</a>',
-            '<a href="#" class="badge badge-dark">'+tag+'</a>',
-            '<a href="#" class="badge badge-dark">'+tag+'</a>',
-            '</div>',
-            '<div class="row">',
-            '<div class="col-sm">',
-            '<div class="profile-overview">',
-            '<p>Age</p>',
-            '<h4>'+profilAge+'</h4>',
-            '</div>',
-            '</div>',
-            '<div class="col-sm">',
-            '<div class="profile-overview">',
-            '<p>Vu</p>',
-            '<h4>'+profilCompteurVue+'</h4>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>'
-        ];
 
-        $("body").append(html); */
+            $.get("getallage", function(data, status){
+                var array = eval(data);
+                var range = document.getElementById("age");
+                for (let i = 0; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.text = array[i];
+                    range.appendChild(option);
+                }
+            });
+
+            $.get("getalltags", function(data, status){
+                var array = eval(data);
+                var range = document.getElementById("tag");
+                for (let i = 0; i < array.length; i++) {
+                    var option = document.createElement("option");
+                    option.text = array[i];
+                    range.appendChild(option);
+                }
+            });
+        });    
+        
+        $("button").click(function(){
+            var age = $("#age").val();
+            var tag = $("#tag").val();
+            url = url+"/all/"+age+"/"+tag;
+        }); 
 
         function createCard(urlPicture, profilName, profilInsta, tag, profilAge, profilAge, profilCompteurVue) {
             var deck = document.getElementById("idDeck");
             var card = document.createElement("div");
             card.setAttribute("class","card");
             deck.appendChild(card);
-            //var ppTag = haddleTags(tag);
             var html = [
                     '<div class="profile-card-4 text-center"><img src="'+urlPicture+'" class="img img-responsive" style="width: 100%">',
                         '<div class="profile-content">',
@@ -225,16 +230,6 @@
             card.appendChild(temp);
             
 
-        };
-
-        function haddleTags(data) {
-            if (data == null) return "";
-            var tags = "";
-            for (i = 0; i < data.length; i++) {
-                var tag = '<a href="#" class="badge badge-dark">'+data[i]+'</a>';
-                tags += tag;
-            }
-            return tags
         };
 
     </script>

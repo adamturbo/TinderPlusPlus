@@ -1,51 +1,72 @@
 from flask import Flask, render_template, request, redirect, url_for
 from elasticsearch import Elasticsearch
+import json
+import unidecode
 
 app = Flask(__name__)
 
-LOCAL = True
+LOCAL = False
 
 es_client = Elasticsearch(hosts=["localhost" if LOCAL else "elasticsearch_tinder"])
 
-es_client.indices.delete(index='tinderplusplus', ignore=[400, 404])
-
-data = {
-    "name" : "Laury",
-    "age" : "19",
-    "picture" : "https://scontent-cdt1-1.cdninstagram.com/v/t51.2885-19/s150x150/70397507_2154880494806199_5101106879065489408_n.jpg?tp=1&_nc_ht=scontent-cdt1-1.cdninstagram.com&_nc_ohc=gkUkJ3UgE78AX9HC2GJ&edm=ABfd0MgAAAAA&ccb=7-4&oh=ca21a6541933b37981be5747c02538c4&oe=60AB2738&_nc_sid=7bff83",
-    "instagram" : "laury_rdg",
-    "tags": ['Musée', 'Sports', 'Voyage', 'Art', 'Astrologie'] 
-}
-
 @app.route('/')
-def home():
-    name = data['name']
-    age = data['age']
-    photo = data['picture']
-    instagram = data['instagram']
-    tags = data['tags']
-    return render_template('index.html', name=name, age=age, photo=photo, instagram=instagram, tags = tags)
-
-@app.route('/marcketplace')
 def marketplace():
-    name = data['name']
-    age = data['age']
-    photo = data['picture']
-    instagram = data['instagram']
-    tags = data['tags']
-    return render_template('marcketplace.html', name=name, age=age, photo=photo, instagram=instagram, tags = tags)
+    return render_template('marcketplace.html')
 
-@app.route('/apiTinderPlusPlus')
+@app.route('/api')
 def apiTinderPlusPlus():
-    result = es_client.search(index="tinderplusplus_prod", size=9)
-    """
-    result['hits']['hits']
-    return result['hits']['hits']
-    """
+    result = es_client.search(index='tinderplusplus_prod', size=1000)
+
     return result
 
-@app.route('/toto')
-def toto():
-    return "toto"
+@app.route('/api/all/<age>/<tag>')
+def apiAll(age, tag):
+    value = str(age)," ",str(tag)
+    data = {"query":{"simple_query_string" : {"query": value,"fields": ["tag", "age"]}}}
+    result = es_client.search(index='tinderplusplus_prod', body=data)
+
+    return result
+
+@app.route('/api/age/<age>')
+def apiAge(age):
+    data = {"query": {"match" :{"age": str(age)}}}
+    result = es_client.search(index='tinderplusplus_prod', body=data)
+
+    return result
+
+@app.route('/api/tag/<tag>')
+def apiTag(tag):
+    data = {"query" : {"simple_query_string" : {"query": str(tag),"fields": ["tag"]}}}
+    result = es_client.search(index='tinderplusplus_prod', body=data)
+
+    return result
+
+@app.route('/getalltags')
+def getalltags():
+    result = es_client.search(index="tinderplusplus_prod", body={"query": {"match_all": {}}})
+    tags = []
+    for hit in result['hits']['hits']:
+        for tag in hit['_source']['tag']:
+            tag = unidecode.unidecode(tag)
+            tags.append(tag)
+
+    tags = list(dict.fromkeys(tags))
+        
+    return json.dumps(tags)
+
+
+@app.route('/getallage')
+def getallage():
+    result = es_client.search(index="tinderplusplus_prod", body={"query": {"match_all": {}}})
+    age = []
+    for hit in result['hits']['hits']:
+        age.append(hit['_source']['age'])
+
+    age = list(dict.fromkeys(age))
+
+    age = sorted(age)
+
+    return json.dumps(age)
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)

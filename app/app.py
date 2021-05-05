@@ -15,7 +15,6 @@ def marketplace():
 
 @app.route('/api')
 def apiTinderPlusPlus():
-<<<<<<< HEAD
     result = es_client.search(index='tinderplusplus_prod', size=1000)
 
     return result
@@ -33,17 +32,6 @@ def apiAge(age):
     data = {"query": {"match" :{"age": str(age)}}}
     result = es_client.search(index='tinderplusplus_prod', body=data)
 
-=======
-<<<<<<< HEAD
-    result = es_client.search(index="tinderplusplus_prod", size=5)
-=======
-    result = es_client.search(index="tinderplusplus_prod", size=9)
->>>>>>> b8f3ffc3a8477faa8ca03d3d4180cedd2d50fac3
-    """
-    result['hits']['hits']
-    return result['hits']['hits']
-    """
->>>>>>> 41fba99db7da09707262432c71beb45784897b02
     return result
 
 @app.route('/api/tag/<tag>')
